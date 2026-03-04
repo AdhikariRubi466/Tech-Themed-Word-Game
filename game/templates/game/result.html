@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Result</title>
+    {% load static %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("/static/images/mt.jpg");
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding-top: 100px;
+
+            /* Background Image */
+            background-image: url("/static/images/mt.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            
+        }
+
+        .win {
+            color: #00ff88;
+        }
+
+        .lose {
+            color: red;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #00adb5;
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: #007f83;
+        }
+    </style>
+</head>
+<body>
+
+{% if win %}
+    <h1 class="win">🎉 You Won!</h1>
+    <h2>Your Score: {{ score }}</h2>
+{% else %}
+    <h1 class="lose">❌ Game Over</h1>
+{% endif %}
+
+<h3>The Word Was: {{ word|upper }}</h3>
+
+<a href="/">Play Again</a>
+
+<form action="{% url 'play' %}">
+    <button type="submit">Next → Start Game</button>
+</form>
+
+</body>
+</html>

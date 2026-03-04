@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Play Game</title>
+    {% load static %}
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+
+            /* Background Image */
+            background-image: url("/static/images/mt.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Glass container */
+        .container {
+            width: 420px;
+            padding: 35px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            color: black;   /* important for readability */
+}
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        .attempts {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 85%;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 2px solid #00adb5;
+            outline: none;
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        input:focus {
+            border-color: #00ffcc;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            background: #00adb5;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #008c92;
+        }
+
+        .correct {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .present {
+            color: orange;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .absent {
+            color: gray;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .memorize {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+{% if show_preview %}
+    <div class="memorize">🧠 Memorize It</div>
+
+    <div id="wordlist">
+        {% for word in word_list %}
+            {{ word|upper }}<br>
+        {% endfor %}
+    </div>
+
+    <div id="game" style="display:none;">
+{% else %}
+    <div id="game">
+{% endif %}
+
+        <div class="attempts">
+            Attempts Remaining: {{ attempts }}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="guess" maxlength="5" required>
+            <br>
+            <button type="submit">Guess</button>
+        </form>
+
+        <div style="margin-top:15px;">
+            {% for row in feedback %}
+                <div>
+                    {% for status, letter in row %}
+                        <span class="{{ status }}">{{ letter|upper }}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+{% if show_preview %}
+<script>
+    setTimeout(function() {
+        document.getElementById("wordlist").style.display = "none";
+        document.querySelector(".memorize").style.display = "none";
+        document.getElementById("game").style.display = "block";
+    }, 500);  // 0.5 seconds
+</script>
+{% endif %}
+
+</body>
+</html>
